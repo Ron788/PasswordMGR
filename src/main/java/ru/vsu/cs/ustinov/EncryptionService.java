@@ -5,6 +5,7 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
 public class EncryptionService {
@@ -15,10 +16,15 @@ public class EncryptionService {
     private static final int IV_SIZE = 16;
     private static final byte[] IV = new byte[IV_SIZE];
 
-    public SecretKey generateSecretKey() throws Exception{
+    public SecretKey generateSecretKey() throws NoSuchAlgorithmException {
         KeyGenerator keyGen = KeyGenerator.getInstance(ALGORITHM);
         keyGen.init(KEY_SIZE);
         return keyGen.generateKey();
+    }
+
+    public SecretKey getKeyFromPassword(String password) {
+        byte[] key = password.getBytes();
+        return new SecretKeySpec(key, 0, 16, ALGORITHM);
     }
 
     public String encrypt(String data, SecretKey secretKey) throws Exception {

@@ -6,6 +6,9 @@ import org.json.simple.parser.ParseException;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -31,6 +34,33 @@ class DatabaseTest {
         JSONObject obj2 = db.read();
 
         assertEquals(obj.toJSONString(), obj2.toJSONString());
+    }
+
+    @Test
+    void WriteReadData() throws NoSuchAlgorithmException, IOException, ParseException {
+        Database db = new Database();
+        EncryptionService encryptionService = new EncryptionService();
+
+        String key = encryptionService.keyToString(encryptionService.generateSecretKey());
+        Map<String, String> dataMap = new HashMap<>();
+        dataMap.put("name", "test");
+        dataMap.put("age", "age");
+        dataMap.put("gender", "male");
+
+        Database.Data data1 = new Database.Data(key, dataMap);
+
+        db.writeData(data1);
+        Database.Data data2 = db.readData();
+
+        assertEquals(data1.key(), data2.key());
+
+        Map<String, String> dataMap2 = data2.values();
+
+        for (Map.Entry<String, String> entry : dataMap.entrySet()) {
+            assertEquals(entry.getValue(), dataMap2.get(entry.getKey()));
+        }
+
+
     }
 
 }
