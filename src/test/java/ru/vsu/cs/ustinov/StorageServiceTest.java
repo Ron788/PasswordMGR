@@ -1,6 +1,7 @@
 package ru.vsu.cs.ustinov;
 
 import org.junit.jupiter.api.Test;
+import ru.vsu.cs.ustinov.utils.StorageService;
 
 import java.io.IOException;
 

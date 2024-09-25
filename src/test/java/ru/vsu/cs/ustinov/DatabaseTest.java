@@ -4,9 +4,12 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import org.junit.jupiter.api.Test;
+import ru.vsu.cs.ustinov.utils.Database;
+import ru.vsu.cs.ustinov.utils.EncryptionService;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,11 +40,10 @@ class DatabaseTest {
     }
 
     @Test
-    void WriteReadData() throws NoSuchAlgorithmException, IOException, ParseException {
+    void WriteReadData() throws NoSuchAlgorithmException, IOException, ParseException, InvalidKeySpecException {
         Database db = new Database();
-        EncryptionService encryptionService = new EncryptionService();
 
-        String key = encryptionService.keyToString(encryptionService.generateSecretKey());
+        String key = EncryptionService.keyToString(EncryptionService.getKeyFromPassword("123321"));
         Map<String, String> dataMap = new HashMap<>();
         dataMap.put("name", "test");
         dataMap.put("age", "age");

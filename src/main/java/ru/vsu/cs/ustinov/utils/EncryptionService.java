@@ -1,11 +1,14 @@
-package ru.vsu.cs.ustinov;
+package ru.vsu.cs.ustinov.utils;
 
-import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
+import javax.crypto.*;
 import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.KeySpec;
 import java.util.Base64;
 
 public class EncryptionService {
@@ -16,18 +19,14 @@ public class EncryptionService {
     private static final int IV_SIZE = 16;
     private static final byte[] IV = new byte[IV_SIZE];
 
-    public SecretKey generateSecretKey() throws NoSuchAlgorithmException {
-        KeyGenerator keyGen = KeyGenerator.getInstance(ALGORITHM);
-        keyGen.init(KEY_SIZE);
-        return keyGen.generateKey();
+
+    public static SecretKey getKeyFromPassword(String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        KeySpec spec = new PBEKeySpec(password.toCharArray(), new byte[16], 65536, KEY_SIZE);
+        SecretKeyFactory f = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+        return new SecretKeySpec(f.generateSecret(spec).getEncoded(), ALGORITHM);
     }
 
-    public SecretKey getKeyFromPassword(String password) {
-        byte[] key = password.getBytes();
-        return new SecretKeySpec(key, 0, 16, ALGORITHM);
-    }
-
-    public String encrypt(String data, SecretKey secretKey) throws Exception {
+    public static String encrypt(String data, SecretKey secretKey) throws NoSuchPaddingException, NoSuchAlgorithmException, IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException, InvalidKeyException {
         Cipher cipher = Cipher.getInstance(TRANSFORMATION);
         IvParameterSpec ivSpec = new IvParameterSpec(IV);
         cipher.init(Cipher.ENCRYPT_MODE, secretKey, ivSpec);
@@ -36,7 +35,7 @@ public class EncryptionService {
         return Base64.getEncoder().encodeToString(encryptedData);
     }
 
-    public String decrypt(String encryptedData, SecretKey secretKey) throws Exception {
+    public static String decrypt(String encryptedData, SecretKey secretKey) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
         Cipher cipher = Cipher.getInstance(TRANSFORMATION);
         IvParameterSpec ivSpec = new IvParameterSpec(IV);
         cipher.init(Cipher.DECRYPT_MODE, secretKey, ivSpec);
@@ -46,11 +45,11 @@ public class EncryptionService {
         return new String(decryptedData);
     }
 
-    public String keyToString(SecretKey key) {
+    public static String keyToString(SecretKey key) {
         return Base64.getEncoder().encodeToString(key.getEncoded());
     }
 
-    public SecretKey stringToKey(String key) {
+    public static SecretKey stringToKey(String key) {
         byte[] decodedKey = Base64.getDecoder().decode(key);
         return new SecretKeySpec(decodedKey, 0, decodedKey.length, ALGORITHM);
     }

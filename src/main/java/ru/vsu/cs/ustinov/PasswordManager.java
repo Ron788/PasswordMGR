@@ -49,6 +49,7 @@ public class PasswordManager {
                     add <login>
                     get <login>
                     remove <login>
+                    list
                 """);
     }
 }

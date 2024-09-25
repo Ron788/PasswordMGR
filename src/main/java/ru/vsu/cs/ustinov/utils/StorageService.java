@@ -1,4 +1,4 @@
-package ru.vsu.cs.ustinov;
+package ru.vsu.cs.ustinov.utils;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -6,9 +6,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Класс для распределенного хранилища информации
+ * По сути просто разбивает информацию на куски и записывает все в разные файлы в одной папке
+ */
 public class StorageService {
 
-    private static final int BLOCK_SIZE = 128;
+    private static final int BLOCK_SIZE = 128; // кол-во символов в одном файле
     private final String directoryPath;
 
     public StorageService(String directoryPath) {

@@ -1,4 +1,4 @@
-package ru.vsu.cs.ustinov;
+package ru.vsu.cs.ustinov.utils;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -9,10 +9,12 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Класс для хранения и считывания данных, работает с JSONObject
+ */
 public class Database {
 
-    public record Data(String key, Map<String, String> values) {
-    }
+    public record Data(String key, Map<String, String> values) { }
 
     private static final String FILE_PATH = "./storage/";
 
