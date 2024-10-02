@@ -1,7 +1,6 @@
 package ru.vsu.cs.ustinov;
 
-import java.io.Console;
-import java.io.File;
+import ru.vsu.cs.ustinov.crypto.Password;
 import java.util.Scanner;
 
 public class PasswordManager {
@@ -72,8 +71,6 @@ public class PasswordManager {
     }
 
     static boolean checkStorage(){
-        //TODO: Изменить логику проверки
-        File dir = new File(Config.getStoragePath());
-        return dir.exists();
+        return Password.checkRegistration();
     }
 }

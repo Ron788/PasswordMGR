@@ -22,6 +22,9 @@ public class Crypto {
     }
 
     public static SecretKey getKeyFromPassword(String password) {
+        /*
+        Генерируем секретный ключ на основе пароля
+         */
         KeySpec spec = new PBEKeySpec(password.toCharArray(), new byte[16], 65536, KEY_SIZE);
         try{
             SecretKeyFactory f = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
@@ -30,5 +33,20 @@ public class Crypto {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static String keyToString(SecretKey key) {
+        /*
+        Конвертируем секретный ключ в строку
+         */
+        return Base64.getEncoder().encodeToString(key.getEncoded());
+    }
+
+    public static SecretKey stringToKey(String key) {
+        /*
+        Конвертируем строку в секретный ключ
+         */
+        byte[] decodedKey = Base64.getDecoder().decode(key);
+        return new SecretKeySpec(decodedKey, 0, decodedKey.length, ALGORITHM);
     }
 }

@@ -7,6 +7,7 @@ import javax.crypto.SecretKey;
 import java.io.Console;
 import java.util.Scanner;
 
+//TODO: Надо переименоваться бы этот класс и методы ммм
 public class Password {
     private String password;
 
@@ -23,7 +24,9 @@ public class Password {
     }
 
     void getUserPassword(){
-        // Берем пароль у пользователя и сохраняем в поле
+        /*
+        Берем пароль у пользователя и сохраняем в поле
+        */
         this.password = Crypto.convertPassword(readPasswordFromUser());
     }
 
@@ -36,9 +39,13 @@ public class Password {
         SecretKey secretKey = Crypto.getKeyFromPassword(password);
         Storage storage = new Storage(Config.getStoragePath());
 
+        if (!checkRegistration()){
+            return false;
+        }
 
+        String loginData = storage.getFileContent(Config.getLoginFile());
 
-        return false;
+        return loginData.equals(Crypto.keyToString(secretKey));
     }
 
     char[] readPasswordFromUser() {
@@ -60,5 +67,30 @@ public class Password {
         }
 
         return password;
+    }
+
+    public static boolean checkRegistration(){
+        /*
+        Проверяем существует ли (и не пустой ли он) файл с данными на вход
+        По хорошему нужно больше проверок, но пока сойдет думаю
+         */
+        return new Storage(Config.getStoragePath()).checkNonEmptyFile(Config.getLoginFile());
+    }
+
+    public boolean registration(){
+        //TODO: Переименовать бы
+        /*
+        Метод регистрирующий пользователя. Кэширует пароль и вписывает его в файл
+         */
+        if (checkRegistration()){
+            return false;
+        }
+
+        SecretKey secretKey = Crypto.getKeyFromPassword(password);
+        Storage storage = new Storage(Config.getStoragePath());
+
+        storage.writeFile(Config.getLoginFile(), Crypto.keyToString(secretKey));
+
+        return true;
     }
 }
