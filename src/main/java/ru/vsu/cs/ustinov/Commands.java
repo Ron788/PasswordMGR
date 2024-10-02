@@ -20,24 +20,14 @@ public class Commands {
         //TODO: Мдооо даже здесь ничего
     }
     static void help(){
-        //TODO: Ну вот с этим же никаких проблем не должно быть
-    }
-
-    static char[] readPassword() {
-        // Используем для возможности скрытого ввода
-        // (при вводе пароля он не будет в консоли отображаться)
-        Console console = System.console();
-
-        char[] password;
-        if (console == null) {
-            // Но в идее это не поддерживается, поэтому читаем обычным образом
-            System.out.print("Enter password: ");
-            Scanner scanner = new Scanner(System.in);
-            password = scanner.nextLine().toCharArray();
-        }else {
-            password = console.readPassword("Enter password: ");
-        }
-
-        return password;
+        System.out.println("""
+                Использование:
+                
+                add - команда для добавления пароля в базу паролей
+                remove - команда для удаления пароля из базы
+                view - просмотр пароля по логину
+                list - просмотр всех добавленных логинов
+                register - делается один раз, задается пароль для авторизации
+                """);
     }
 }

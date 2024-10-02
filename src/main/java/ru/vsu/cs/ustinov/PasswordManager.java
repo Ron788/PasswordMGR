@@ -32,8 +32,10 @@ public class PasswordManager {
 
         if (command.equals("register")) {
             Commands.register();
+            return;
         }else if (command.equals("help")) {
             Commands.help();
+            return;
         }
 
         if (!checkRegister()){
