@@ -2,23 +2,33 @@ package ru.vsu.cs.ustinov;
 
 import ru.vsu.cs.ustinov.crypto.Password;
 
-import java.io.Console;
 import java.util.Scanner;
 
 public class Commands {
     static void add(){
-        //TODO: Сделать сюда логику нада
         Password password = new Password();
         if (!password.userLogin()){
-            System.out.println("пупупупу");
+            System.out.println("пупупупу (");
             return;
         }
 
-        System.out.println("NORMASSS");
+        System.out.println("Вводи логин и пароль через пробел >> ");
+        Scanner scanner = new Scanner(System.in);
+        String[] data = scanner.nextLine().split(" ");
+
+        if (data.length != 2){
+            System.out.println("Некорректный формат данных :(");
+            return;
+        }
+
+        //TODO: Ну доо теперь надо сохранять...
+
+
 
     }
     static void remove(){
         //TODO: И сюда логику нада
+
     }
     static void list(){
         //TODO: И тут логика нужна

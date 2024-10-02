@@ -72,7 +72,7 @@ public class Password {
     public static boolean checkRegistration(){
         /*
         Проверяем существует ли (и не пустой ли он) файл с данными на вход
-        По хорошему нужно больше проверок, но пока сойдет думаю
+        По-хорошему нужно больше проверок, но пока сойдет думаю
          */
         return new Storage(Config.getStoragePath()).checkNonEmptyFile(Config.getLoginFile());
     }
