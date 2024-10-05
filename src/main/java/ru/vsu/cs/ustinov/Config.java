@@ -1,6 +1,10 @@
 package ru.vsu.cs.ustinov;
 
 public class Config {
+    /*
+    Конфиги...
+    (по поводу содержания отзывался уже в комментах в классе PasswordManager)
+     */
     private static final String STORAGE_PATH = "./storage";
 
     private static final String LOGIN_FILE = "login.dat";
