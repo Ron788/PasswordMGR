@@ -4,7 +4,10 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 
 public class Storage {
-    private final String directoryPath;
+    /*
+    Класс для работы с файлами напрямую
+     */
+    protected final String directoryPath;
 
     public Storage(String directoryPath) {
         this.directoryPath = directoryPath;
@@ -13,6 +16,9 @@ public class Storage {
     }
 
     void checkDir(){
+        /*
+        Проверяем существование папки и создаем если не существует
+         */
         File dir = new File(directoryPath);
         if(!dir.exists()){
             //noinspection ResultOfMethodCallIgnored
@@ -20,12 +26,10 @@ public class Storage {
         }
     }
 
-    public boolean hasFile(String fileName){
-        File file = new File(directoryPath + File.separator + fileName);
-        return file.exists();
-    }
-
     public String getFileContent(String fileName){
+        /*
+        Получаем данные из какого-либо файла
+         */
         File file = new File(directoryPath + File.separator + fileName);
 
         StringBuilder result = new StringBuilder();
@@ -43,6 +47,9 @@ public class Storage {
     }
 
     public boolean checkNonEmptyFile(String fileName){
+        /*
+        Проверяем, что файл не пустой
+         */
         File file = new File(directoryPath + File.separator + fileName);
         if (!file.exists()){
             return false;
@@ -60,6 +67,9 @@ public class Storage {
     }
 
     public void writeFile(String fileName, String content){
+        /*
+        Записываем в конкретный файл
+         */
         File file = new File(directoryPath + File.separator + fileName);
 
         try (Writer writer = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8)){

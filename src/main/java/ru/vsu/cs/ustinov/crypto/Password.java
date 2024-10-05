@@ -9,25 +9,44 @@ import java.util.Scanner;
 
 //TODO: Надо переименоваться бы этот класс и методы ммм
 public class Password {
+    /*
+    Класс для авторизации пользователя.
+     */
     private String password;
+    // Исходный пароль и секретный ключ на основе его и используется для шифрования данных
+    private SecretKey secretKey;
 
     public String getPassword() {
         return password;
+    }
+
+    public SecretKey getSecretKey() {
+        return secretKey;
     }
 
     public Password() {
         getUserPassword();
     }
 
-    public boolean userLogin(){
-        return checkValidUserInput();
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    public boolean checkUserLogin(){
+        /*
+        Проверяем успешна ли авторизация пользователя
+         */
+        if (checkValidUserInput()){
+            return true;
+        }
+
+        System.out.println("Пароль то неверный!");
+        return false;
     }
 
     void getUserPassword(){
         /*
-        Берем пароль у пользователя и сохраняем в поле
+        Берем пароль у пользователя и сохраняем
         */
         this.password = Crypto.convertPassword(readPasswordFromUser());
+        secretKey = Crypto.getKeyFromPassword(password);
     }
 
     boolean checkValidUserInput() {
@@ -36,7 +55,7 @@ public class Password {
         если все сошлось, можно считать, что авторизация пользователя прошла успешно
          */
 
-        SecretKey secretKey = Crypto.getKeyFromPassword(password);
+        String hashPass = Crypto.hashString(password);
         Storage storage = new Storage(Config.getStoragePath());
 
         if (!checkRegistration()){
@@ -45,7 +64,7 @@ public class Password {
 
         String loginData = storage.getFileContent(Config.getLoginFile());
 
-        return loginData.equals(Crypto.keyToString(secretKey));
+        return loginData.equals(hashPass);
     }
 
     char[] readPasswordFromUser() {
@@ -80,16 +99,16 @@ public class Password {
     public boolean registration(){
         //TODO: Переименовать бы
         /*
-        Метод регистрирующий пользователя. Кэширует пароль и вписывает его в файл
+        Метод регистрирующий пользователя. Хэширует пароль и вписывает его в файл
          */
         if (checkRegistration()){
             return false;
         }
 
-        SecretKey secretKey = Crypto.getKeyFromPassword(password);
+        String hashPass = Crypto.hashString(password);
         Storage storage = new Storage(Config.getStoragePath());
 
-        storage.writeFile(Config.getLoginFile(), Crypto.keyToString(secretKey));
+        storage.writeFile(Config.getLoginFile(), hashPass);
 
         return true;
     }

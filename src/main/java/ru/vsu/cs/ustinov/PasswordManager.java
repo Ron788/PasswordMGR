@@ -62,15 +62,11 @@ public class PasswordManager {
     }
 
     static boolean checkRegister(){
-        if (checkStorage()){
+        if (Password.checkRegistration()){
             return true;
         }
 
         System.out.println("Для работы необходимо зарегистрироваться!\n- Используй команду register -_-");
         return false;
-    }
-
-    static boolean checkStorage(){
-        return Password.checkRegistration();
     }
 }

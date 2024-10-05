@@ -1,43 +1,95 @@
 package ru.vsu.cs.ustinov;
 
 import ru.vsu.cs.ustinov.crypto.Password;
+import ru.vsu.cs.ustinov.storage.Database;
 
+import java.util.Map;
 import java.util.Scanner;
 
 public class Commands {
     static void add(){
+        // В принципе все эти методы однотипные, поэтому комменты будут только тут
+
+        // Авторизация пользователя, сделал под это отдельный класс
         Password password = new Password();
-        if (!password.userLogin()){
-            System.out.println("пупупупу (");
+        if (!password.checkUserLogin()){ // Туда же вынесена вся логика по вводу пароля и оттуда же будет ответ, если пароль неверный
             return;
         }
+        String[] data = new String[2];
 
-        System.out.println("Вводи логин и пароль через пробел >> ");
+        // Считываем логин и пароль понятно
+        System.out.print("Вводи логин чтоб добавить новую запись >> ");
         Scanner scanner = new Scanner(System.in);
-        String[] data = scanner.nextLine().split(" ");
+        data[0] = scanner.nextLine();
 
-        if (data.length != 2){
-            System.out.println("Некорректный формат данных :(");
-            return;
-        }
+        System.out.print("Вводи пароль теперь >> ");
+        data[1] = scanner.nextLine();
 
-        //TODO: Ну доо теперь надо сохранять...
+        // А тут уже магия...
+        // Ну если опустить ее, что эта мапа по сути все логины и пароли
+        Map<String, String> dataMap = Database.read(password.getSecretKey());
 
+        // Мы туда добавляем новые данные
+        dataMap.put(data[0], data[1]);
 
+        // И теперь сохраняем все
+        Database.write(password.getSecretKey(), dataMap);
 
+        System.out.println("Success wrode!");
     }
     static void remove(){
-        //TODO: И сюда логику нада
+        Password password = new Password();
+        if (!password.checkUserLogin()){
+            return;
+        }
+        Map<String, String> dataMap = Database.read(password.getSecretKey());
+
+        System.out.print("Вводи логин чтоб по нему удалить запись >> ");
+        Scanner scanner = new Scanner(System.in);
+        String data = scanner.nextLine();
+
+        if (dataMap.get(data) == null){
+            System.out.println("Нет там такого!");
+        }
+
+        dataMap.remove(data);
+        Database.write(password.getSecretKey(), dataMap);
+        System.out.println("Success wrode!");
 
     }
     static void list(){
-        //TODO: И тут логика нужна
+        Password password = new Password();
+        if (!password.checkUserLogin()){
+            return;
+        }
+        Map<String, String> dataMap = Database.read(password.getSecretKey());
+        System.out.println("Логины в базе:");
+        for (Map.Entry<String, String> entry : dataMap.entrySet()) {
+            System.out.println(entry.getKey());
+        }
     }
     static void view(){
-        //TODO: Пупупу тут тоже пусто
+        Password password = new Password();
+        if (!password.checkUserLogin()){
+            return;
+        }
+
+        Map<String, String> dataMap = Database.read(password.getSecretKey());
+
+        System.out.print("Вводи логин чтоб по нему узнать пароль >> ");
+        Scanner scanner = new Scanner(System.in);
+        String data = scanner.nextLine();
+
+        String pass = dataMap.get(data);
+        if (pass == null){
+            System.out.println("Не найдено!!!");
+            return;
+        }
+
+        System.out.println("Пароль >> " + pass);
+
     }
     static void register(){
-        //TODO: Мдооо даже здесь ничего
         if (Password.checkRegistration()) {
             System.out.println("Уже зарегистрирован же...");
             return;
