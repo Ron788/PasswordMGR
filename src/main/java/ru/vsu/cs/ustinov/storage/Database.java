@@ -1,11 +1,9 @@
 package ru.vsu.cs.ustinov.storage;
 
 
-import netscape.javascript.JSObject;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import ru.vsu.cs.ustinov.Config;
 import ru.vsu.cs.ustinov.crypto.Crypto;
 
