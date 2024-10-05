@@ -6,6 +6,7 @@ import ru.vsu.cs.ustinov.storage.Database;
 import java.util.Map;
 import java.util.Scanner;
 
+
 public class Commands {
 
     static void add(){
@@ -66,6 +67,12 @@ public class Commands {
             return;
         }
         Map<String, String> dataMap = Database.read(password.getSecretKey());
+
+        if (dataMap.isEmpty()){
+            System.out.println("Пусто!");
+            return;
+        }
+
         System.out.println("Логины в базе:");
         for (Map.Entry<String, String> entry : dataMap.entrySet()) {
             System.out.println(entry.getKey());

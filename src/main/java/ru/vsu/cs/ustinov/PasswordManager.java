@@ -49,7 +49,7 @@ public class PasswordManager {
             return;
         }
 
-        switch (command) {
+        switch (command.trim().toLowerCase()) {
             case "add":
                 Commands.add();
                 break;
