@@ -4,7 +4,15 @@ import ru.vsu.cs.ustinov.crypto.Password;
 import java.util.Scanner;
 
 public class PasswordManager {
+    /*
+    Пупупу, вроде готово.
+    Старался комментировать большинство моментов -_-
 
+    P.S.
+    Cодержимое этого класса и класса Commands мне вообще не нравится
+    + конфиги желательно подгружать из какого-нибудь файла
+    но я и так затянул со сдачей =))))
+     */
     public static void main(String[] args) {
         System.out.println("== Password Manager ==");
 

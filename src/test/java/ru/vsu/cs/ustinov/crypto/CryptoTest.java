@@ -10,6 +10,9 @@ class CryptoTest {
 
     @Test
     void EncryptDecrypt() {
+        /*
+        Тупо проверяем, что до и после шифрования имеет ту же строку
+         */
         String text = "Hello World! Привет мир.";
         SecretKey secretKey = Crypto.getKeyFromPassword("auf ssssstrong passs");
 

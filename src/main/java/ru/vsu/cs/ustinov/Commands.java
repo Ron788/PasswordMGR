@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class Commands {
+
     static void add(){
         // В принципе все эти методы однотипные, поэтому комменты будут только тут
 
@@ -37,6 +38,7 @@ public class Commands {
 
         System.out.println("Success wrode!");
     }
+
     static void remove(){
         Password password = new Password();
         if (!password.checkUserLogin()){
@@ -57,6 +59,7 @@ public class Commands {
         System.out.println("Success wrode!");
 
     }
+
     static void list(){
         Password password = new Password();
         if (!password.checkUserLogin()){
@@ -68,6 +71,7 @@ public class Commands {
             System.out.println(entry.getKey());
         }
     }
+
     static void view(){
         Password password = new Password();
         if (!password.checkUserLogin()){
@@ -89,6 +93,7 @@ public class Commands {
         System.out.println("Пароль >> " + pass);
 
     }
+
     static void register(){
         if (Password.checkRegistration()) {
             System.out.println("Уже зарегистрирован же...");
@@ -103,6 +108,7 @@ public class Commands {
 
         System.out.println("Успешно!");
     }
+
     static void help(){
         System.out.println("""
                 Использование:
