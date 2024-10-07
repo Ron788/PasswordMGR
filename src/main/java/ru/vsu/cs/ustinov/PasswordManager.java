@@ -1,6 +1,6 @@
 package ru.vsu.cs.ustinov;
 
-import ru.vsu.cs.ustinov.crypto.Password;
+import ru.vsu.cs.ustinov.crypto.AuthService;
 import java.util.Scanner;
 
 public class PasswordManager {
@@ -13,32 +13,25 @@ public class PasswordManager {
     + конфиги желательно подгружать из какого-нибудь файла
     но я и так затянул со сдачей =))))
 
-    UPD: вроде стало и лучше и не лучше одновременно...
+    UPD: местами вроде лучше, но в целом оценить сложно
      */
     public static void main(String[] args) {
         System.out.println("== Password Manager ==");
-
-        System.out.println("""
-                Доступные команды:
-                    help
-                    add
-                    view
-                    list
-                    remove
-                """);
 
         if (!checkRegister()){
             Commands.register();
         }
 
         System.out.println("Авторизация!");
-        Password password = new Password();
-        if (!password.checkUserLogin()){
+        AuthService authService = new AuthService();
+        if (!authService.checkUserLogin()){
             return;
         }
-        System.out.println("Вы вошли в менеджер паролей!");
 
-        Commands commands = new Commands(password.getSecretKey());
+        System.out.println("Вы вошли в менеджер паролей!");
+        System.out.println("\n -_- Просмотр доступных команд по команде help!");
+
+        Commands commands = new Commands(authService.getSecretKey());
 
         //noinspection InfiniteLoopStatement
         while (true) {
@@ -72,7 +65,7 @@ public class PasswordManager {
     }
 
     static boolean checkRegister(){
-        if (Password.checkRegistration()){
+        if (AuthService.checkRegistration()){
             return true;
         }
 

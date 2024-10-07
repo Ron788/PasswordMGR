@@ -1,6 +1,6 @@
 package ru.vsu.cs.ustinov;
 
-import ru.vsu.cs.ustinov.crypto.Password;
+import ru.vsu.cs.ustinov.crypto.AuthService;
 
 import javax.crypto.SecretKey;
 import java.util.Map;
@@ -90,12 +90,12 @@ public class Commands {
     }
 
     static void register(){
-        if (Password.checkRegistration()) {
+        if (AuthService.checkRegistration()) {
             System.out.println("Уже зарегистрирован же...");
             return;
         }
-        Password password = new Password();
-        if (!password.registration()){
+        AuthService authService = new AuthService();
+        if (!authService.registerUser()){
             System.out.println("Что-то пошло не так...");
             return;
         }

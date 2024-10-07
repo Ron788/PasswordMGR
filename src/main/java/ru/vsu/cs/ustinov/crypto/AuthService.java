@@ -7,22 +7,48 @@ import javax.crypto.SecretKey;
 import java.io.Console;
 import java.util.Scanner;
 
-//TODO: Надо переименоваться бы этот класс и методы ммм
-public class Password {
+public class AuthService {
     /*
     Класс для авторизации пользователя.
     В целом этот класс тоже теперь отношу к тем, которые мне не нравятся =D
      */
-    private String password;
+    private final String password;
     // Исходный пароль и секретный ключ на основе его и используется для шифрования данных
-    private SecretKey secretKey;
+    private final SecretKey secretKey;
 
     public SecretKey getSecretKey() {
         return secretKey;
     }
 
-    public Password() {
-        getUserPassword();
+    public AuthService() {
+        /*
+        Берем пароль у пользователя и сохраняем
+        */
+        this.password = readPasswordFromUser();
+        this.secretKey = Crypto.getKeyFromPassword(password);
+    }
+
+    String readPasswordFromUser() {
+        /*
+         Просто считываем пароль от пользователя,
+         используем для возможности скрытого ввода
+         (при вводе пароля он не будет в консоли отображаться)
+        */
+        String printMessage = "Введите пароль >> ";
+
+        Console console = System.console();
+
+        String password;
+        if (console == null) {
+            // Но в идее скрытый ввод не поддерживается, поэтому читаем обычным образом
+            System.out.print(printMessage);
+            Scanner scanner = new Scanner(System.in);
+            password = scanner.nextLine().trim();
+        }else {
+            password = Crypto.convertPassword(console.readPassword(printMessage));
+        }
+
+        return password;
     }
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
@@ -30,23 +56,15 @@ public class Password {
         /*
         Проверяем успешна ли авторизация пользователя
          */
-        if (checkValidUserInput()){
+        if (checkValidPassword()){
             return true;
         }
 
-        System.out.println("Пароль то неверный!");
+        System.out.println("== Ошибка! Неверный пароль!");
         return false;
     }
 
-    void getUserPassword(){
-        /*
-        Берем пароль у пользователя и сохраняем
-        */
-        this.password = Crypto.convertPassword(readPasswordFromUser());
-        secretKey = Crypto.getKeyFromPassword(password);
-    }
-
-    boolean checkValidUserInput() {
+    boolean checkValidPassword() {
         /*
         Пароль сохраненный хэшируем, сравниваем с записанным в файл loginInfo,
         если все сошлось, можно считать, что авторизация пользователя прошла успешно
@@ -64,27 +82,6 @@ public class Password {
         return loginData.equals(hashPass);
     }
 
-    char[] readPasswordFromUser() {
-        /*
-         Просто считываем пароль от пользователя,
-         используем для возможности скрытого ввода
-         (при вводе пароля он не будет в консоли отображаться)
-        */
-        Console console = System.console();
-
-        char[] password;
-        if (console == null) {
-            // Но в идее скрытый ввод не поддерживается, поэтому читаем обычным образом
-            System.out.print("Enter password: ");
-            Scanner scanner = new Scanner(System.in);
-            password = scanner.nextLine().trim().toCharArray();
-        }else {
-            password = console.readPassword("Enter password: ");
-        }
-
-        return password;
-    }
-
     public static boolean checkRegistration(){
         /*
         Проверяем существует ли (и не пустой ли он) файл с данными на вход
@@ -93,8 +90,7 @@ public class Password {
         return new Storage(Config.getStoragePath()).checkNonEmptyFile(Config.getLoginFile());
     }
 
-    public boolean registration(){
-        //TODO: Переименовать бы
+    public boolean registerUser(){
         /*
         Метод регистрирующий пользователя. Хэширует пароль и вписывает его в файл
          */
