@@ -12,6 +12,8 @@ public class PasswordManager {
     Cодержимое этого класса и класса Commands мне вообще не нравится
     + конфиги желательно подгружать из какого-нибудь файла
     но я и так затянул со сдачей =))))
+
+    UPD: вроде стало и лучше и не лучше одновременно...
      */
     public static void main(String[] args) {
         System.out.println("== Password Manager ==");
@@ -19,48 +21,48 @@ public class PasswordManager {
         System.out.println("""
                 Доступные команды:
                     help
-                    register
                     add
                     view
                     list
                     remove
                 """);
 
+        if (!checkRegister()){
+            Commands.register();
+        }
+
+        System.out.println("Авторизация!");
+        Password password = new Password();
+        if (!password.checkUserLogin()){
+            return;
+        }
+        System.out.println("Вы вошли в менеджер паролей!");
+
+        Commands commands = new Commands(password.getSecretKey());
+
         //noinspection InfiniteLoopStatement
         while (true) {
-            readCommand();
+            readCommand(commands);
         }
     }
 
-    static void readCommand(){
+    static void readCommand(Commands commands) {
         System.out.print("\n== Введи команду >> ");
         Scanner scanner = new Scanner(System.in);
         String command = scanner.nextLine();
 
-        if (command.equals("register")) {
-            Commands.register();
-            return;
-        }else if (command.equals("help")) {
-            Commands.help();
-            return;
-        }
-
-        if (!checkRegister()){
-            return;
-        }
-
         switch (command.trim().toLowerCase()) {
             case "add":
-                Commands.add();
+                commands.add();
                 break;
             case "view":
-                Commands.view();
+                commands.view();
                 break;
             case "remove":
-                Commands.remove();
+                commands.remove();
                 break;
             case "list":
-                Commands.list();
+                commands.list();
                 break;
             default:
                 Commands.help();
@@ -74,7 +76,7 @@ public class PasswordManager {
             return true;
         }
 
-        System.out.println("Для работы необходимо зарегистрироваться!\n- Используй команду register -_-");
+        System.out.println("Для начала работы необходимо зарегистрироваться!");
         return false;
     }
 }

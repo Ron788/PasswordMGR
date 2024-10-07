@@ -14,8 +14,7 @@ class DatabaseTest {
 
     @Test
     void WriteReadTest() {
-        // Ну с этим тестом есть проблемка в виде того, что он может затереть все данные существующие (тк работает в основной директории)
-        // Наверное надо будет делать методы класса Database не статическими...
+        Database database = new Database("./testStorage");
         SecretKey secretKey = Crypto.getKeyFromPassword("It`s strong pass для теста!!!");
 
         Map<String, String> data = new HashMap<>();
@@ -25,9 +24,9 @@ class DatabaseTest {
         data.put("key4", "value4");
         data.put("key5", "value5");
 
-        Database.write(secretKey, data);
+        database.write(secretKey, data);
 
-        Map<String, String> result = Database.read(secretKey);
+        Map<String, String> result = database.read(secretKey);
 
         assertEquals(data, result);
     }

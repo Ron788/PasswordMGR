@@ -11,14 +11,11 @@ import java.util.Scanner;
 public class Password {
     /*
     Класс для авторизации пользователя.
+    В целом этот класс тоже теперь отношу к тем, которые мне не нравятся =D
      */
     private String password;
     // Исходный пароль и секретный ключ на основе его и используется для шифрования данных
     private SecretKey secretKey;
-
-    public String getPassword() {
-        return password;
-    }
 
     public SecretKey getSecretKey() {
         return secretKey;
@@ -80,7 +77,7 @@ public class Password {
             // Но в идее скрытый ввод не поддерживается, поэтому читаем обычным образом
             System.out.print("Enter password: ");
             Scanner scanner = new Scanner(System.in);
-            password = scanner.nextLine().toCharArray();
+            password = scanner.nextLine().trim().toCharArray();
         }else {
             password = console.readPassword("Enter password: ");
         }

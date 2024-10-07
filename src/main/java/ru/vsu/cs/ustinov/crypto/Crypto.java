@@ -39,21 +39,6 @@ public class Crypto {
         }
     }
 
-    public static String keyToString(SecretKey key) {
-        /*
-        Конвертируем секретный ключ в строку
-         */
-        return Base64.getEncoder().encodeToString(key.getEncoded());
-    }
-
-    public static SecretKey stringToKey(String key) {
-        /*
-        Конвертируем строку в секретный ключ
-         */
-        byte[] decodedKey = Base64.getDecoder().decode(key);
-        return new SecretKeySpec(decodedKey, 0, decodedKey.length, ALGORITHM);
-    }
-
     public static String encrypt(String data, SecretKey secretKey) {
         /*
         Шифруем данные по ключу

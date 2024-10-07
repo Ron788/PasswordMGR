@@ -4,7 +4,6 @@ package ru.vsu.cs.ustinov.storage;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import ru.vsu.cs.ustinov.Config;
 import ru.vsu.cs.ustinov.crypto.Crypto;
 
 import javax.crypto.SecretKey;
@@ -18,14 +17,20 @@ public class Database {
     для записи конвертируется в JSON. JSON в строку, строка шифруется.
      */
 
-    public static Map<String, String> read(SecretKey secretKey) {
+    private final String storagePath;
+
+    public Database(String storagePath) {
+        this.storagePath = storagePath;
+    }
+
+    public Map<String, String> read(SecretKey secretKey) {
         /*
         Читаем данные из хранилища.
         Принимается секретный ключ, чтобы дешифровать данные сразу.
          */
 
         // Класс для работы с хранилищем
-        DistributedStorage dStorage = new DistributedStorage(Config.getStoragePath());
+        DistributedStorage dStorage = new DistributedStorage(storagePath);
         // Читаем все данные и расшифровываем
         String encryptedData = Crypto.decrypt(dStorage.readFile(), secretKey);
 
@@ -55,12 +60,12 @@ public class Database {
     }
 
     @SuppressWarnings("unchecked")
-    public static void write(SecretKey secretKey, Map<String, String> data) {
+    public void write(SecretKey secretKey, Map<String, String> data) {
         /*
         Записываем данные в хранилище
         Мапу конвертируем в JSON, JSON в строку, строку шифруем и записываем
          */
-        DistributedStorage dStorage = new DistributedStorage(Config.getStoragePath());
+        DistributedStorage dStorage = new DistributedStorage(storagePath);
 
         // Основной объект
         JSONObject jsonObject = new JSONObject();
